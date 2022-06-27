@@ -1,68 +1,105 @@
 # Tab Meeting StageView Vote Movie Fluid - Microsoft Teams App
 
-Generate a Microsoft Teams application.
+Teams meeting app showing up in sidePanel and on stageView. Letting users vote for a movie in sidePanel and shwing then the most voted one for all in stageView. Featured by Microsoft FluidFramework and Azure Fluid Relay service.
 
-TODO: Add your documentation here
+## Summary
 
-## Getting started with Microsoft Teams Apps development
+This sample is a Teams meeting app created using the Teams Yeoman Generator. It's a tab showing up during in-Meeting experience in the sidePanel but also, once shared, in the stageView for all meeting participants. The synchronization of the voting data is established by usage of Microsoft FluidFramework and Azure Fluid Relay service.
 
-Head on over to [Microsoft Teams official documentation](https://developer.microsoft.com/en-us/microsoft-teams) to learn how to build Microsoft Teams Tabs or the [Microsoft Teams Yeoman generator docs](https://github.com/PnP/generator-teams/docs) for details on how this solution is set up.
+Open sidePanel
 
-## Project setup
+![OnStageView](assets/02InMeeting_Voting.jpg)
 
-All required source code are located in the `./src` folder:
+Share onStage view
 
-* `client` client side code
-* `server` server side code
-* `public` static files for the web site
-* `manifest` for the Microsoft Teams app manifest
+![OnStageView](assets/04ShareVoteMovieInStageView.jpg)
 
-For further details see the [Yo Teams documentation](https://github.com/PnP/generator-teams/docs)
+The onStage view experience
 
-## Building the app
+![OnStageView](assets/03WatchMostVotedVideoResult.jpg)
 
-The application is built using the `build` Gulp task.
+For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2022/07/)
 
-``` bash
-npm i -g gulp-cli
-gulp build
-```
+## Prerequisites
 
-## Building the manifest
+* [Office 365 tenant](https://dev.office.com/sharepoint/docs/spfx/set-up-your-development-environment)
+* [Node.js](https://nodejs.org) version 10.14.1 or higher
+* [Gulp CLI](https://github.com/gulpjs/gulp-cli) `npm install gulp-cli --global`
+* [ngrok](https://ngrok.com) or similar tunneling application is required for local testing
+* [Azure Fluid Relay service]()
 
-To create the Microsoft Teams Apps manifest, run the `manifest` Gulp task. This will generate and validate the package and finally create the package (a zip file) in the `package` folder. The manifest will be validated against the schema and dynamically populated with values from the `.env` file.
+    ```bash
+    # determine node version
+    node --version
+    ```
 
-``` bash
-gulp manifest
-```
+## Version history
 
-## Deploying the manifest
+Version|Date|Author|Comments
+-------|----|----|--------
+1.0|Jun 29, 2022|[Markus Moeller](https://twitter.com/moeller2_0)|Initial release
 
-Using the `yoteams-deploy` plugin, automatically added to the project, deployment of the manifest to the Teams App store can be done manually using `gulp tenant:deploy` or by passing the `--publish` flag to any of the `serve` tasks.
+## Disclaimer
 
-## Configuration
+**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
-Configuration is stored in the `.env` file.
+## Minimal Path to Awesome
+- Clone the repository
+    ```bash
+    git clone https://github.com/mmsharepoint/tab-meeting-stageview-vote-movie-fluid.git
+    ```
 
-## Debug and test locally
+- In a console, navigate to `/tab-meeting-stageview-vote-movie-fluid`
 
-To debug and test the solution locally you use the `serve` Gulp task. This will first build the app and then start a local web server on port 3007, where you can test your Tabs, Bots or other extensions. Also this command will rebuild the App if you change any file in the `/src` directory.
+    ```bash
+    cd tab-meeting-stageview-vote-movie-fluid
+    ```
 
-``` bash
-gulp serve
-```
+- Install modules
 
-To debug the code you can append the argument `debug` to the `serve` command as follows. This allows you to step through your code using your preferred code editor.
+    ```bash
+    npm install
+    ```
+- Create an Azure App Configuration as [described here](https://mmsharepoint.wordpress.com/2021/05/17/configure-teams-applications-with-azure-app-configuration-nodejs/#createappconfig)
+- Add your configured App Configuration Http endpoint to .env as AZURE_CONFIG_CONNECTION_STRING
+- Register an app and secret and insert it to your .env as AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET and grant access to the Azure App Configuration and Azure Key Vault if you need to debug locally
 
-``` bash
-gulp serve --debug
-```
+- Run ngrok and note down the given url
+
+    ```bash
+    gulp start-ngrok
+    ```
+- Package the app
+    ```bash
+    gulp manifest
+- Start the app
+    ```bash
+    gulp serve --debug
+    ```
+- Create a new teams meeting with at least one participant
+- Open the meeting in Edit mode
+- At the right end of the tabs click (+) to add a new app and sideload your package
+- Join the meeting with a physical Teams desktop client
+
+## Features
+
+This is a Teams Tab meeting app to show up in side panel and meeting stageView
+* Show a tab in in-meeting experience in sidePanel
+* Show as in-meeting experience shareable in stageView for all participants at the same time
+* Show individual content based on the frameContext (sidePanel vs meetinStage)
+* Configure your Teams Tab with custom values
+    * Store them in Azure App Configuration
+* Usage of Microsoft Fluid Framework for syncing real-time data
+* Usage of Azure Fluid Relay service as backend service for Microsoft Fluid Framework
+* Render video files with React and HTML5
+
+
 
 ## Useful links
 
-* [Debugging with Visual Studio Code](https://github.com/pnp/generator-teams/blob/master/docs/docs/user-guide/vscode.md)
-* [Developing with ngrok](https://github.com/pnp/generator-teams/blob/master/docs/docs/concepts/ngrok.md)
-* [Developing with Github Codespaces](https://github.com/pnp/generator-teams/blob/master/docs/docs/user-guide/codespaces.md)
+* [Debugging with Visual Studio Code](https://github.com/pnp/generator-teams/blob/master/docs/docs/vscode.md)
+* [Developing with ngrok](https://github.com/pnp/generator-teams/blob/master/docs/docs/ngrok.md)
+* [Developing with Github Codespaces](https://github.com/pnp/generator-teams/blob/master/docs/docs/codespaces.md)
 
 ## Additional build options
 

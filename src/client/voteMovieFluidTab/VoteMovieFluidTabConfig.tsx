@@ -46,7 +46,7 @@ export const VoteMovieFluidTabConfig = () => {
             websiteUrl: host + "/voteMovieTab/?" + 
                 containerIdQueryParamKey + "=" + currentContainerId +
                 "&name={loginHint}&tenant={tid}&group={groupId}&theme={theme}",
-            suggestedDisplayName: "Vote Movie",
+            suggestedDisplayName: "Vote Movie Fluid",
             removeUrl: host + "/voteMovieTab/remove.html?theme={theme}",
             entityId: entityId.current
         });

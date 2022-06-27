@@ -11,6 +11,7 @@ export const appConfigService = (options: any) =>  {
     let movie1url = "";
     let movie2url = "";
     let movie3url = "";
+    let containerId = "";
     try {
       const movie1Setting = await client.getConfigurationSetting({ key: `VoteMovie1Url_${meetingID}`});
       movie1url = movie1Setting.value!;
@@ -18,11 +19,13 @@ export const appConfigService = (options: any) =>  {
       movie2url = movie2Setting.value!;
       const movie3Setting = await client.getConfigurationSetting({ key: `VoteMovie3Url_${meetingID}`});
       movie3url = movie3Setting.value!;
+      const containerIdSetting = await client.getConfigurationSetting({ key: `ContainerId_${meetingID}`});
+      containerId = containerIdSetting.value!;
     }
     catch(error) {
       
     }
-    return Promise.resolve({ movie1url: movie1url, movie2url: movie2url, movie3url: movie3url });
+    return Promise.resolve({ movie1url: movie1url, movie2url: movie2url, movie3url: movie3url, containerId: containerId });
   };
     
   const saveConfig = async (meetingID: string, newConfig: IMovieConfig) => {
@@ -35,6 +38,9 @@ export const appConfigService = (options: any) =>  {
     }
     if (newConfig.movie3url) {
       await client.setConfigurationSetting({ key: `VoteMovie3Url_${meetingID}`, value: newConfig.movie3url });
+    }
+    if (newConfig.containerId) {
+      await client.setConfigurationSetting({ key: `ContainerId_${meetingID}`, value: newConfig.containerId });
     }
   };
     

@@ -1,64 +1,51 @@
 import * as React from "react";
 import { Provider, Flex, Text, Button, Header, mergeThemes } from "@fluentui/react-northstar";
 import { useState, useEffect } from "react";
-import { useTeams } from "msteams-react-base-component";
-import Axios from "axios";
-import { IResults } from "../../model/IResults";
+
 import { IVoteMovieFluidVotingProps } from "./IVoteMovieFluidVotingProps";
 
 /**
  * Implementation of the Vote Movie voting part
  */
 export const VoteMovieFluidVoting: React.FC<IVoteMovieFluidVotingProps> = (props) => {
-    const video1Ref = React.useRef<HTMLVideoElement>(null);
-    const video2Ref = React.useRef<HTMLVideoElement>(null);
-    const video3Ref = React.useRef<HTMLVideoElement>(null);
-    const [movie1, setMovie1] = useState<string>();
-    const [movie2, setMovie2] = useState<string>();
-    const [movie3, setMovie3] = useState<string>();
-    const [votes, setVotes] = useState<IResults>();
-    const [votable, setVotable] = useState<boolean>(true);
+  const [votes1, setVotes1] = React.useState<number>(props.votingMap.get("votes1")!);
+  const [votes2, setVotes2] = React.useState<number>(props.votingMap.get("votes2")!);
+  const [votes3, setVotes3] = React.useState<number>(props.votingMap.get("votes3")!);
 
-    const vote = async (movie: number) => {        
-        const response = await Axios.post(`https://${process.env.PUBLIC_HOSTNAME}/api/votenc/${props.meetingID}/${movie}/${props.userID}`);
-        evalVotable();
-    };
+  const video1Ref = React.useRef<HTMLVideoElement>(null);
+  const video2Ref = React.useRef<HTMLVideoElement>(null);
+  const video3Ref = React.useRef<HTMLVideoElement>(null);
+      
+  const [votable, setVotable] = useState<boolean>(true);
+  const evalVotable = () => {
+    const votedUsers: string = props.votingMap.get("votedUsers") as string;
+    setVotable(votedUsers.indexOf(props.userID) < 0);
+  };
+  
+  const vote = async (movie: number) => {        
+    props.votingMap.set("votes1", votes1! + 1);
+    let votedUsers = props.votingMap.get("votedUsers");
+    votedUsers += `;${props.userID}`;
+    props.votingMap.set("votedUsers", votedUsers);
+    setVotable(true); // evalVotable();
+  };
+  useEffect(() => {
+      evalVotable();
+  }, []);
 
-    const loadVotes = async () => {
-        Axios.get(`https://${process.env.PUBLIC_HOSTNAME}/api/votesnc/${props.meetingID}`).then((response) => {
-            setVotes(response.data);
-            setTimeout(() => loadVotes(), 5000);
-        });
-    };
-    
-    const evalVotable = async () => {
-        const userID = props.userID;
-        Axios.get(`https://${process.env.PUBLIC_HOSTNAME}/api/votable/${props.meetingID}/${userID}`).then((response) => {
-            const config = response.data;
-            setVotable(response.data);
-        });
-    };
-
-    useEffect(() => {
-        Axios.get(`https://${process.env.PUBLIC_HOSTNAME}/api/config/${props.meetingID}`).then((response) => {
-            const config = response.data;
-            setMovie1(config.movie1url);
-            setMovie2(config.movie2url);
-            setMovie3(config.movie3url);
-        });
-        loadVotes();
-        evalVotable();
-    }, []);
-
-    useEffect(() => {
-        video1Ref!.current!.load();
-    }, [movie1]);
-    useEffect(() => {
-        video2Ref!.current!.load();
-    }, [movie2]);
-    useEffect(() => {
-        video3Ref!.current!.load();
-    }, [movie3]);
+    React.useEffect(() => {
+      const updateVotes = () => {
+        setVotes1(props.votingMap.get("votes1")!);
+        setVotes2(props.votingMap.get("votes2")!);
+        setVotes3(props.votingMap.get("votes3")!);
+      };
+  
+      props.votingMap.on("valueChanged", updateVotes);
+  
+      return () => {
+        props.votingMap.off("valueChanged", updateVotes);
+      };
+    });
     /**
      * The render() method to create the UI of the tab
      */
@@ -74,30 +61,30 @@ export const VoteMovieFluidVoting: React.FC<IVoteMovieFluidVotingProps> = (props
                     <div className="panelSize">
                         <div className="videoFrame">
                             <video ref={video1Ref} controls width={260}>
-                                <source src={movie1} type="video/mp4"></source>
+                                <source src={props.movie1Url} type="video/mp4"></source>
                             </video>
                         </div>
                         {votable &&
                         <div>
-                            <Button className="voteBtn" onClick={() => vote(1)}>Vote Movie 1</Button>
+                            <Button className="voteBtn" onClick={() => { vote(1); }}>Vote Movie 1</Button>
                         </div>}
                         <div className="videoFrame">
                             <video ref={video2Ref} controls width={260}>
-                                <source src={movie2}></source>
+                                <source src={props.movie2Url}></source>
                             </video>
                         </div>
                         {votable &&
                         <div>
-                            <Button className="voteBtn" onClick={() => vote(2)}>Vote Movie 2</Button>
+                            <Button className="voteBtn" onClick={() => { props.votingMap.set("votes2", votes2! + 1); }}>Vote Movie 2</Button>
                         </div>}
                         <div className="videoFrame">
                             <video ref={video3Ref} controls width={260}>
-                                <source src={movie3}></source>
+                                <source src={props.movie3Url}></source>
                             </video>
                         </div>
                         {votable &&
                         <div>
-                            <Button className="voteBtn" onClick={() => vote(3)}>Vote Movie 3</Button>
+                            <Button className="voteBtn" onClick={() => { props.votingMap.set("votes3", votes3! + 1); }}>Vote Movie 3</Button>
                         </div>}                        
                     </div>
                 </Flex.Item>
@@ -105,9 +92,9 @@ export const VoteMovieFluidVoting: React.FC<IVoteMovieFluidVotingProps> = (props
                     padding: ".8rem 0 .8rem .5rem"
                 }}>
                     <div>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 1: ${votes?.votes1}`} /></span>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 2: ${votes?.votes2}`} /></span>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 3: ${votes?.votes3}`} /></span>
+                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 1: ${votes1}`} /></span>
+                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 2: ${votes2}`} /></span>
+                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 3: ${votes3}`} /></span>
                     </div>
                 </Flex.Item>
             </Flex>

@@ -1,7 +1,7 @@
 import { AzureClient, AzureClientProps, AzureFunctionTokenProvider } from "@fluidframework/azure-client";
 import { InsecureTokenProvider } from "@fluidframework/test-client-utils";
 import { ContainerSchema, IFluidContainer, SharedMap } from "fluid-framework";
-import { AzureFunctionTokenProviderSec } from "./AzureFunctionTokenProviderSec";
+//import { AzureFunctionTokenProviderSec } from "./AzureFunctionTokenProviderSec";
 
 let userID = "";
 const useAzure = false; // | true
@@ -33,6 +33,7 @@ const createContainer = async (client: AzureClient): Promise<string> => {
   sharedVotes.set("votes1", 0);
   sharedVotes.set("votes2", 0);
   sharedVotes.set("votes3", 0);
+  sharedVotes.set("votedUsers", "");
 
   const containerId = await container.attach();
   return containerId;
@@ -46,7 +47,7 @@ const getContainer = async (client: AzureClient, id : string): Promise<IFluidCon
 const getClient = (userId: string, authToken?: string): AzureClient => {
   userID = userId;
   if (authToken !== undefined) {
-    connectionConfig.connection.tokenProvider = new AzureFunctionTokenProviderSec(process.env.REACT_APP_AZURETOKENURL + "/api/FluidTokenProvider", authToken, { userId: userID, userName: "Test User" });
+    // connectionConfig.connection.tokenProvider = new AzureFunctionTokenProviderSec(process.env.REACT_APP_AZURETOKENURL + "/api/FluidTokenProvider", authToken, { userId: userID, userName: "Test User" });
   }  
   const client = new AzureClient(connectionConfig);
   return client;
@@ -61,12 +62,16 @@ export async function getFluidContainer(userId: string, authToken?: string, cont
 
   return container;
 };
-export async function getFluidContainerId(userId: string, authToken?: string, containerId?: string): Promise<string> {
-  const client = getClient(userId, authToken);
-  if (!containerId || containerId === "") {
-    containerId = await createContainer(client);
+export async function getFluidContainerId(userId: string, authToken?: string, containerId?: string): Promise<string> {  
+  try {
+    const client = getClient(userId, authToken);
+    if (!containerId || containerId === "") {
+      containerId = await createContainer(client);
+    }
+    const container = await getContainer(client, containerId);
+    return containerId;
   }
-  const container = await getContainer(client, containerId);
-
-  return container.;
+  catch {
+    return "";
+  }  
 };
