@@ -11,12 +11,12 @@
     "termsOfUseUrl": "https://{{PUBLIC_HOSTNAME}}/tou.html"
   },
   "name": {
-    "short": "StageView Vote Movie Fluid",
-    "full": "Tab Meeting StageView Vote Movie Fluid"
+    "short": "Tab Meeting Vote Movie Fluid",
+    "full": "Tab Meeting Vote Movie Fluid"
   },
   "description": {
-    "short": "TODO: add short description here",
-    "full": "TODO: add full description here"
+    "short": "Meeting app showing voted movie in stage view. (FLUID)",
+    "full": "Meeting app showing voted movie in stage view after voted in side panel. (FLUID)"
   },
   "icons": {
     "outline": "icon-outline.png",
@@ -30,6 +30,16 @@
       "scopes": [
         "team",
         "groupchat"
+      ],
+      "context": [
+        "meetingChatTab",
+        "meetingDetailsTab",
+        "meetingSidePanel",
+        "meetingStage"
+      ],
+      "meetingSurfaces": [
+        "sidePanel",
+        "stage"
       ]
     }
   ],
@@ -42,8 +52,12 @@
     "messageTeamMembers"
   ],
   "validDomains": [
-    "{{PUBLIC_HOSTNAME}}"
+    ""
   ],
   "showLoadingIndicator": false,
-  "isFullScreen": false
+  "isFullScreen": false,
+  "webApplicationInfo": {
+    "id": "{{TAB_APP_ID}}",
+    "resource": "api://{{PUBLIC_HOSTNAME}}/{{TAB_APP_ID}}"
+  }
 }

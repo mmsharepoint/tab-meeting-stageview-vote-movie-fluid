@@ -7,6 +7,6 @@
       "useAzureAppInsights": false
     },
     "libraryName": "tabMeetingStageviewVoteMovieFluid",
-    "generator-version": "4.0.0"
+    "generator-version": "4.0.1"
   }
 }

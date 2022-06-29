@@ -75,7 +75,8 @@ const config = [{
     devtool: debug ? "source-map" : "source-map",
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
-        alias: {}
+        alias: {},
+        fallback: { "assert": false }
     },
     target: "web",
     module: {
@@ -91,7 +92,14 @@ const config = [{
         }]
     },
     plugins: [
-        new webpack.EnvironmentPlugin({ PUBLIC_HOSTNAME: undefined, TAB_APP_ID: null, TAB_APP_URI: null }),
+        new webpack.EnvironmentPlugin({ PUBLIC_HOSTNAME: undefined, 
+            TAB_APP_ID: null, 
+            TAB_APP_URI: null, 
+            REACT_APP_TENANT_ID: null,
+            REACT_APP_ORDERER: null,
+            REACT_APP_STORAGE: null,
+            REACT_APP_AZURETOKENURL: null,
+            REACT_APP_REDIRECTURI: null }),
         new ForkTsCheckerWebpackPlugin({
             typescript: {
                 configFile: "./src/client/tsconfig.json"

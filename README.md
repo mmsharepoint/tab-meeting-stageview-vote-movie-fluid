@@ -26,7 +26,7 @@ For further details see the author's [blog post](https://mmsharepoint.wordpress.
 * [Node.js](https://nodejs.org) version 10.14.1 or higher
 * [Gulp CLI](https://github.com/gulpjs/gulp-cli) `npm install gulp-cli --global`
 * [ngrok](https://ngrok.com) or similar tunneling application is required for local testing
-* [Azure Fluid Relay service]()
+* [Azure Fluid Relay service](https://azure.microsoft.com/en-us/services/fluid-relay?WT.mc_id=M365-MVP-5004617)
 
     ```bash
     # determine node version
