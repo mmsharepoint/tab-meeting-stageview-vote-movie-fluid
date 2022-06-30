@@ -95,13 +95,14 @@ export const VoteMovieFluidTab = () => {
                   movie3Url={movie3!} 
                   votingMap={fluidContainerMap!} />}
       {meetingId && !inStageView && fluidContainerMap !== undefined &&
-        <VoteMovieFluidVoting userID={context?.user?.id!} 
-                              meetingID={meetingId!} 
-                              theme={theme} 
-                              movie1Url={movie1!} 
-                              movie2Url={movie2!} 
-                              movie3Url={movie3!} 
-                              votingMap={fluidContainerMap!} />}
+        <VoteMovieFluidVoting 
+                  userID={context?.user?.id!} 
+                  meetingID={meetingId!} 
+                  theme={theme} 
+                  movie1Url={movie1!} 
+                  movie2Url={movie2!} 
+                  movie3Url={movie3!} 
+                  votingMap={fluidContainerMap!} />}
     </div>
   );
 };
