@@ -13,17 +13,16 @@ import { getFluidContainer } from "../utils";
  */
 export const VoteMovieFluidTab = () => {
   const [{ inTeams, theme, context }] = useTeams();
-  const [idToken, setIdToken] = useState<string>();
   const [meetingId, setMeetingId] = useState<string | undefined>();
   const [inStageView, setInStageView] = useState<boolean>(false);
-  const [containerId, setContainerId] = useState<string>();
   const [fluidContainerMap, setFluidContainerMap] = useState<SharedMap>();
   const [movie1, setMovie1] = useState<string>();
   const [movie2, setMovie2] = useState<string>();
   const [movie3, setMovie3] = useState<string>();
+  const secureAccess = true; // false
 
-  const setFluidAccess = () => {
-    getFluidContainer(context?.user?.userPrincipalName!, undefined, containerId)
+  const setFluidAccess = (token: string, containerId: string) => {
+    getFluidContainer(context?.user?.userPrincipalName!, token, containerId)
       .then((fluidContainer) => {
         if (fluidContainer !== undefined) {
           const sharedVotes = fluidContainer.initialObjects.sharedVotes as SharedMap;
@@ -37,7 +36,35 @@ export const VoteMovieFluidTab = () => {
           resources: [process.env.TAB_APP_URI as string],
           silent: false
       } as authentication.AuthTokenRequestParameters).then(token => {
-          setIdToken(token);
+          if (context) {
+            let meeting = "";
+            if (context?.meeting?.id === "") {
+              meeting = "alias";
+            }
+            else {
+              meeting = context?.meeting?.id!;
+            }
+            setMeetingId(meeting);
+            
+            if (context?.page.frameContext === FrameContexts.meetingStage) {
+              setInStageView(true);
+            }
+            else {
+              setInStageView(false);
+            }
+            Axios.get(`https://${process.env.PUBLIC_HOSTNAME}/api/config/${meeting}`).then((response) => {
+              const config = response.data;
+              setMovie1(config.movie1url);
+              setMovie2(config.movie2url);
+              setMovie3(config.movie3url);
+              if (secureAccess && token !== "") {
+                setFluidAccess(token, config.containerId);
+              }
+              else if (!secureAccess) {
+                setFluidAccess("", config.containerId);
+              }    
+            });
+          }
           app.notifySuccess();
       }).catch(message => {
           app.notifyFailure({
@@ -47,39 +74,6 @@ export const VoteMovieFluidTab = () => {
       });
     }
   }, [inTeams]);
-
-  useEffect(() => {
-    if (containerId !== undefined) {
-      setFluidAccess();
-    }    
-  }, [containerId]);
-
-  useEffect(() => {
-    if (context) {
-      let meeting = "";
-      if (context?.meeting?.id === "") {
-        meeting = "alias";
-      }
-      else {
-        meeting = context?.meeting?.id!;
-      }
-      setMeetingId(meeting);
-      
-      if (context?.page.frameContext === FrameContexts.meetingStage) {
-        setInStageView(true);
-      }
-      else {
-        setInStageView(false);
-      }
-      Axios.get(`https://${process.env.PUBLIC_HOSTNAME}/api/config/${meeting}`).then((response) => {
-        const config = response.data;
-        setMovie1(config.movie1url);
-        setMovie2(config.movie2url);
-        setMovie3(config.movie3url);
-        setContainerId(config.containerId);
-      });
-    }
-  }, [context]);
   
   /**
    * The render() method to create the UI of the tab

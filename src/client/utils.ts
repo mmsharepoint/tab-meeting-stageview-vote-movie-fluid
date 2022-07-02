@@ -1,7 +1,7 @@
 import { AzureClient, AzureClientProps, AzureFunctionTokenProvider, AzureLocalConnectionConfig, AzureRemoteConnectionConfig } from "@fluidframework/azure-client";
 import { InsecureTokenProvider } from "@fluidframework/test-client-utils";
 import { ContainerSchema, IFluidContainer, SharedMap } from "fluid-framework";
-//import { AzureFunctionTokenProviderSec } from "./AzureFunctionTokenProviderSec";
+import { AzureFunctionTokenProviderSec } from "./AzureFunctionTokenProviderSec";
 
 let userID = "";
 const useAzure = true; // | false
@@ -45,16 +45,16 @@ const getContainer = async (client: AzureClient, id : string): Promise<IFluidCon
     return container;
 };
 
-const getClient = (userId: string, authToken?: string): AzureClient => {
+const getClient = (userId: string, authToken: string): AzureClient => {
   userID = userId;
-  if (authToken !== undefined) {
-    // connectionConfig.connection.tokenProvider = new AzureFunctionTokenProviderSec(process.env.REACT_APP_AZURETOKENURL + "/api/FluidTokenProvider", authToken, { userId: userID, userName: "Test User" });
+  if (authToken !== "") {
+    connectionConfig.connection.tokenProvider = new AzureFunctionTokenProviderSec(process.env.REACT_APP_AZURETOKENURL + "/api/FluidTokenProvider", authToken, { userId: userID, userName: "Test User" });
   }  
   const client = new AzureClient(connectionConfig);
   return client;
 };
 
-export async function getFluidContainer(userId: string, authToken?: string, containerId?: string): Promise<IFluidContainer> {
+export async function getFluidContainer(userId: string, authToken: string, containerId?: string): Promise<IFluidContainer> {
   const client = getClient(userId, authToken);
   if (!containerId || containerId === "") {
     containerId = await createContainer(client);
@@ -64,7 +64,7 @@ export async function getFluidContainer(userId: string, authToken?: string, cont
   return container;
 };
 
-export async function getFluidContainerId(userId: string, authToken?: string, containerId?: string): Promise<string> {  
+export async function getFluidContainerId(userId: string, authToken: string, containerId?: string): Promise<string> {  
   try {
     const client = getClient(userId, authToken);
     if (!containerId || containerId === "") {
