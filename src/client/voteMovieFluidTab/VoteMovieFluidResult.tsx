@@ -72,9 +72,9 @@ export const VoteMovieFluidResult: React.FC<IVoteMovieFluidResultsProps> = (prop
             padding: ".8rem 0 .8rem .5rem"
         }}>
           <div>
-            <Text size="smaller" content={`Votes Movie 1: ${votes1}`} />
-            <Text size="smaller" content={`Votes Movie 2: ${votes2}`} />
-            <Text size="smaller" content={`Votes Movie 3: ${votes3}`} />
+            <span className="votesResult"><Text size="smaller" content={`Votes Movie 1: ${votes1}`} /></span>
+            <span className="votesResult"><Text size="smaller" content={`Votes Movie 2: ${votes2}`} /></span>
+            <span className="votesResult"><Text size="smaller" content={`Votes Movie 3: ${votes3}`} /></span>
           </div>
         </Flex.Item>
       </Flex>

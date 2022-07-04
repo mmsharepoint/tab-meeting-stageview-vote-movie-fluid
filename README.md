@@ -18,7 +18,7 @@ The onStage view experience
 
 ![OnStageView](assets/03WatchMostVotedVideoResult.jpg)
 
-For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2022/07/)
+For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2022/06/25/use-fluidframework-in-a-microsoft-teams-app/)
 
 ## Prerequisites
 
@@ -63,7 +63,14 @@ Version|Date|Author|Comments
 - Create an Azure App Configuration as [described here](https://mmsharepoint.wordpress.com/2021/05/17/configure-teams-applications-with-azure-app-configuration-nodejs/#createappconfig)
 - Add your configured App Configuration Http endpoint to .env as AZURE_CONFIG_CONNECTION_STRING
 - Register an app and secret and insert it to your .env as AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET and grant access to the Azure App Configuration and Azure Key Vault if you need to debug locally
-
+- Setup a Azure Fluid Relay Service and put corresponding parameters to .env
+- Adjust code to only use InsecureTokenProvider OR
+- Deploy and configure parallel Azure Function acting as a token provider: https://github.com/mmsharepoint/fluid-vote-movie-tokenprovider 
+- You will need to register an app in Azure AD [also described here](https://mmsharepoint.wordpress.com/2021/09/07/meeting-apps-in-microsoft-teams-1-pre-meeting/#appreg)
+  - "Registered App" will be the identity provider app given by the Azure Function
+  - With exposed Api "access_as_user" and App ID Uri api://{NGrok-Url}/{<App ID>}
+  - With the client IDs for Teams App and Teams Web App 1fec8e78-bce4-4aaf-ab1b-5451cc387264 and 5e3ce6c0-2b1f-4285-8d4b-75ee78787346
+- Also add the app ID and other relevant parameters to local .env (taken from .env-sample) as TAB_APP_ID=  e.g.
 - Run ngrok and note down the given url
 
     ```bash
@@ -100,6 +107,8 @@ This is a Teams Tab meeting app to show up in side panel and meeting stageView
 * [Debugging with Visual Studio Code](https://github.com/pnp/generator-teams/blob/master/docs/docs/vscode.md)
 * [Developing with ngrok](https://github.com/pnp/generator-teams/blob/master/docs/docs/ngrok.md)
 * [Developing with Github Codespaces](https://github.com/pnp/generator-teams/blob/master/docs/docs/codespaces.md)
+* [Microsoft's Fluid Framework](https://fluidframework.com/?WT.mc_id=M365-MVP-5004617)
+* [Microsoft Azure Fluid Relay service](https://azure.microsoft.com/en-us/services/fluid-relay?WT.mc_id=M365-MVP-5004617)
 
 ## Additional build options
 
