@@ -22,82 +22,79 @@ export const VoteMovieFluidVoting: React.FC<IVoteMovieFluidVotingProps> = (props
     setVotable(votedUsers.indexOf(props.userID) < 0);
   };
   
-  const vote = async (movie: number) => {        
-    props.votingMap.set("votes1", votes1! + 1);
+  const vote = async () => {    
     let votedUsers = props.votingMap.get("votedUsers");
     votedUsers += `;${props.userID}`;
     props.votingMap.set("votedUsers", votedUsers);
-    setVotable(true); // evalVotable();
   };
   useEffect(() => {
-      evalVotable();
+    evalVotable();
   }, []);
 
-    React.useEffect(() => {
-      const updateVotes = () => {
-        setVotes1(props.votingMap.get("votes1")!);
-        setVotes2(props.votingMap.get("votes2")!);
-        setVotes3(props.votingMap.get("votes3")!);
-      };
-  
-      props.votingMap.on("valueChanged", updateVotes);
-  
-      return () => {
-        props.votingMap.off("valueChanged", updateVotes);
-      };
-    });
-    /**
-     * The render() method to create the UI of the tab
-     */
-    return (
-        <Provider theme={props.theme}>
-            <Flex fill={true} column styles={{
-                padding: ".8rem 0 .8rem .5rem"
-            }}>
-                <Flex.Item>
-                    <Header content="Vote for your movie" />
-                </Flex.Item>
-                <Flex.Item>
-                    <div className="panelSize">
-                        <div className="videoFrame">
-                            <video ref={video1Ref} controls width={260}>
-                                <source src={props.movie1Url} type="video/mp4"></source>
-                            </video>
-                        </div>
-                        {votable &&
-                        <div>
-                            <Button className="voteBtn" onClick={() => { vote(1); }}>Vote Movie 1</Button>
-                        </div>}
-                        <div className="videoFrame">
-                            <video ref={video2Ref} controls width={260}>
-                                <source src={props.movie2Url}></source>
-                            </video>
-                        </div>
-                        {votable &&
-                        <div>
-                            <Button className="voteBtn" onClick={() => { props.votingMap.set("votes2", votes2! + 1); }}>Vote Movie 2</Button>
-                        </div>}
-                        <div className="videoFrame">
-                            <video ref={video3Ref} controls width={260}>
-                                <source src={props.movie3Url}></source>
-                            </video>
-                        </div>
-                        {votable &&
-                        <div>
-                            <Button className="voteBtn" onClick={() => { props.votingMap.set("votes3", votes3! + 1); }}>Vote Movie 3</Button>
-                        </div>}                        
-                    </div>
-                </Flex.Item>
-                <Flex.Item styles={{
-                    padding: ".8rem 0 .8rem .5rem"
-                }}>
-                    <div>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 1: ${votes1}`} /></span>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 2: ${votes2}`} /></span>
-                        <span className="votesResult"><Text size="smaller" content={`Votes Movie 3: ${votes3}`} /></span>
-                    </div>
-                </Flex.Item>
-            </Flex>
-        </Provider>
+  React.useEffect(() => {
+    const updateVotes = () => {
+      setVotes1(props.votingMap.get("votes1")!);
+      setVotes2(props.votingMap.get("votes2")!);
+      setVotes3(props.votingMap.get("votes3")!);
+      evalVotable();
+    };
+
+    props.votingMap.on("valueChanged", updateVotes);
+
+    return () => {
+      props.votingMap.off("valueChanged", updateVotes);
+    };
+  });
+ 
+  return (
+      <Provider theme={props.theme}>
+        <Flex fill={true} column styles={{
+            padding: ".8rem 0 .8rem .5rem"
+        }}>
+          <Flex.Item>
+              <Header content="Vote for your movie" />
+          </Flex.Item>
+          <Flex.Item>
+            <div className="panelSize">
+              <div className="videoFrame">
+                <video ref={video1Ref} controls width={260}>
+                  <source src={props.movie1Url} type="video/mp4"></source>
+                </video>
+              </div>
+              {votable &&
+              <div>
+                <Button className="voteBtn" onClick={() => { props.votingMap.set("votes1", votes1! + 1); vote(); }}>Vote Movie 1</Button>
+              </div>}
+              <div className="videoFrame">
+                <video ref={video2Ref} controls width={260}>
+                  <source src={props.movie2Url}></source>
+                </video>
+              </div>
+              {votable &&
+              <div>
+                <Button className="voteBtn" onClick={() => { props.votingMap.set("votes2", votes2! + 1); vote(); }}>Vote Movie 2</Button>
+              </div>}
+              <div className="videoFrame">
+                <video ref={video3Ref} controls width={260}>
+                  <source src={props.movie3Url}></source>
+                </video>
+              </div>
+              {votable &&
+              <div>
+                <Button className="voteBtn" onClick={() => { props.votingMap.set("votes3", votes3! + 1); vote(); }}>Vote Movie 3</Button>
+              </div>}                        
+            </div>
+          </Flex.Item>
+          <Flex.Item styles={{
+              padding: ".8rem 0 .8rem .5rem"
+          }}>
+            <div>
+              <span className="votesResult"><Text size="smaller" content={`Votes Movie 1: ${votes1}`} /></span>
+              <span className="votesResult"><Text size="smaller" content={`Votes Movie 2: ${votes2}`} /></span>
+              <span className="votesResult"><Text size="smaller" content={`Votes Movie 3: ${votes3}`} /></span>
+            </div>
+          </Flex.Item>
+        </Flex>
+      </Provider>
     );
 };

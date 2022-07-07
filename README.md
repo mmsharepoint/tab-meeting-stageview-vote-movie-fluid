@@ -6,6 +6,10 @@ Teams meeting app showing up in sidePanel and on stageView. Letting users vote f
 
 This sample is a Teams meeting app created using the Teams Yeoman Generator. It's a tab showing up during in-Meeting experience in the sidePanel but also, once shared, in the stageView for all meeting participants. The synchronization of the voting data is established by usage of Microsoft FluidFramework and Azure Fluid Relay service.
 
+Configure app and video urls
+
+![ConfigureApp](assets/05VoteMovieFluidAppConfiguration.png)
+
 Open sidePanel
 
 ![OnStageView](assets/02InMeeting_Voting.jpg)
@@ -86,7 +90,7 @@ Version|Date|Author|Comments
 - Create a new teams meeting with at least one participant
 - Open the meeting in Edit mode
 - At the right end of the tabs click (+) to add a new app and sideload your package
-- Join the meeting with a physical Teams desktop client
+- Join the meeting with a physical Teams desktop client or a browser which is also possible now (In the beginning only physical Teams desktop client were able to show up in sidePanel)
 
 ## Features
 
@@ -99,6 +103,8 @@ This is a Teams Tab meeting app to show up in side panel and meeting stageView
 * Usage of Microsoft Fluid Framework for syncing real-time data
 * Usage of Azure Fluid Relay service as backend service for Microsoft Fluid Framework
 * Render video files with React and HTML5
+* Implementation of Microsoft Fluid Framework into Microsoft Teams application
+[The same sample without Fluid Framework is available here](https://github.com/mmsharepoint/tab-meeting-stageview-vote-movie)
 
 
 
