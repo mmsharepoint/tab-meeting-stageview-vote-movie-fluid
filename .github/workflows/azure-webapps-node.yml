@@ -7,9 +7,12 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: mmovotemoviefluid    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_PACKAGE_PATH: '.'     # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '16.x'                # set this to the node version to use
   PUBLIC_HOSTNAME: ${{ secrets.PUBLIC_HOSTNAME }}
+  REACT_APP_AZURETOKENURL: ${{ secrets.REACT_APP_AZURETOKENURL }}
+  REACT_APP_TENANT_ID: ${{ secrets.REACT_APP_TENANT_ID }}
+  REACT_APP_ORDERER: ${{ secrets.REACT_APP_ORDERER }}
 
 jobs:
   build:
